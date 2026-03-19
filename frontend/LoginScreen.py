@@ -1,4 +1,5 @@
 import customtkinter
+from backend.database import login as db_login
 
 class LoginScreen:
     def __init__(self, root, switch_to_dashboard, switch_to_register):
@@ -27,13 +28,23 @@ class LoginScreen:
         self.register_button = customtkinter.CTkButton(master=self.frame, text="S'inscrire", command=self.go_to_register)
         self.register_button.pack(pady=12, padx=10)
 
-    def login(self):
+    def login(self):    
         email = self.email_entry.get()
         password = self.password_entry.get()
-        if email and password:
+
+        if not email or not password:
+            self.message.configure(text="Veuillez remplir tous les champs", text_color="red")
+            return
+
+        user = db_login(email,password)
+
+        if user:
+            self.message.configure(text="Connexion réussie", text_color="green")
             self.switch_to_dashboard()
         else:
-            self.message.configure(text="Veuillez remplir tous les champs", text_color="red")
+            self.message.configure(text="Email ou mot de passe incorrect", text_color="red")
+                
+       
 
     def go_to_register(self):
         self.switch_to_register()
