@@ -14,9 +14,8 @@ class DashboardScreen:
         self.message = customtkinter.CTkLabel(master=self.frame, text="ARGENT$")
         self.message.pack(pady=12, padx=10)
 
-        self.back_button = customtkinter.CTkButton(master=self.frame, text="Retour", command=self.go_to_login)
+        self.back_button = customtkinter.CTkButton(master=self.frame, text="Se déconnecter", command=self.go_to_login)
         self.back_button.pack(pady=12, padx=10)
 
     def go_to_login(self):
-        self.frame.destroy()
         self.switch_to_login()

@@ -6,7 +6,7 @@ class LoginScreen:
         self.switch_to_dashboard = switch_to_dashboard
         self.switch_to_register = switch_to_register
 
-        self.frame = customtkinter.CTkFrame(master= root)
+        self.frame = customtkinter.CTkScrollableFrame(master=root, orientation="vertical")
         self.frame.pack(pady=20, padx=60, fill="both", expand=True)
 
         self.label = customtkinter.CTkLabel(master=self.frame, text="Se connecter", font=("Roboto", 24))
@@ -31,11 +31,11 @@ class LoginScreen:
         email = self.email_entry.get()
         password = self.password_entry.get()
         if email and password:
-            self.frame.destroy()
             self.switch_to_dashboard()
         else:
             self.message.configure(text="Veuillez remplir tous les champs", text_color="red")
 
     def go_to_register(self):
-        self.frame.destroy()
         self.switch_to_register()
+
+        
