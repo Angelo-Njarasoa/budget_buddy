@@ -5,7 +5,7 @@ def get_connection():
     conn = mysql.connector.connect(
         host="localhost",
         user="root",
-        password="***",
+        password="Billets",
         database="budget_buddy"
     )
     return conn
@@ -21,6 +21,19 @@ def get_user_by_email(email):
 
     conn.close()
     return user
+def get_balance_by_user(user_id):
+    conn = get_connection()
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        SELECT SUM(montant) FROM transactions
+        WHERE user_id = %s
+    """, (user_id,))
+
+    result = cursor.fetchone()
+    conn.close()
+
+    return result[0] if result[0] else 0
 
 def login(email, password):
     user = get_user_by_email(email)

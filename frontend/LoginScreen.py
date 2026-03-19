@@ -40,7 +40,7 @@ class LoginScreen:
 
         if user:
             self.message.configure(text="Connexion réussie", text_color="green")
-            self.switch_to_dashboard()
+            self.switch_to_dashboard(user)
         else:
             self.message.configure(text="Email ou mot de passe incorrect", text_color="red")
                 

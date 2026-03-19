@@ -3,7 +3,7 @@ from frontend.LoginScreen import LoginScreen
 from frontend.DashboardScreen import DashboardScreen
 
 class ScreenHandler:
-    def __init__(self, root):
+    def __init__(self, root,):
         self.root = root
 
     def clear(self):
@@ -18,6 +18,6 @@ class ScreenHandler:
         self.clear()
         RegisterScreen(self.root, self.display_login)
 
-    def display_dashboard(self):
+    def display_dashboard(self,user):
         self.clear()
-        DashboardScreen(self.root, switch_to_login=self.display_login)
+        DashboardScreen(self.root, switch_to_login=self.display_login,user=user)
