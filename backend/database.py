@@ -5,7 +5,7 @@ def get_connection():
     conn = mysql.connector.connect(
         host="localhost",
         user="root",
-        password="***",
+        password="zut c'est quoi le code déja ?",
         database="budget_buddy"
     )
     return conn
@@ -42,15 +42,23 @@ def login(email, password):
         return user
     return None
 
-# 🔹 INSCRIPTION
+# 🔹 Registration
 def create_user(nom, prenom, email, password):
     conn = get_connection()
     cursor = conn.cursor()
 
-    cursor.execute("""
-        INSERT INTO users (nom, prenom, email, password)
-        VALUES (%s, %s, %s, %s)
-    """, (nom, prenom, email, password))
+    try:
+        cursor.execute("""
+            INSERT INTO users (nom, prenom, email, password)
+            VALUES (%s, %s, %s, %s)
+        """, (nom, prenom, email, password))
 
-    conn.commit()
-    conn.close()
+        conn.commit()
+        return True
+
+    except Exception as e:
+        print("Erreur:", e)
+        return False
+
+    finally:
+        conn.close()

@@ -1,3 +1,4 @@
+from backend.database import create_user
 import customtkinter
 
 
@@ -39,10 +40,17 @@ class RegisterScreen:
         password = self.password_entry.get()
         first_name = self.first_name_entry.get()
         last_name = self.last_name_entry.get()
-        if email and password and first_name and last_name:
-            self.message.configure(text="Compte créé", text_color="green")
-        else:
+
+        if not email or not password or not first_name or not last_name:
             self.message.configure(text="Veuillez remplir tous les champs", text_color="red")
+            return
+
+        success = create_user(last_name, first_name, email, password)
+
+        if success:
+            self.message.configure(text="Compte créé avec succès", text_color="green")
+        else:
+            self.message.configure(text="Email déjà utilisé ou erreur", text_color="red")
 
     def go_to_login(self):
         self.switch_to_login()
