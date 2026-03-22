@@ -5,7 +5,7 @@ def get_connection():
     conn = mysql.connector.connect(
         host="localhost",
         user="root",
-        password="zut c'est quoi le code déja ?",
+        password="Yaniss",
         database="budget_buddy"
     )
     return conn
@@ -43,6 +43,17 @@ def login(email, password):
     return None
 
 # 🔹 Registration
+
+def get_user_by_email(email):
+    conn = get_connection()
+    cursor = conn.cursor(dictionary=True)
+
+    cursor.execute("SELECT * FROM users WHERE email = %s", (email,))
+    user = cursor.fetchone()
+
+    conn.close()
+    return user
+
 def create_user(nom, prenom, email, password):
     conn = get_connection()
     cursor = conn.cursor()
@@ -62,3 +73,10 @@ def create_user(nom, prenom, email, password):
 
     finally:
         conn.close()
+
+try:
+    conn = get_connection()
+    print("Connexion réussie ✅")
+    conn.close()
+except Exception as e:
+    print("Erreur connexion ❌ :", e)

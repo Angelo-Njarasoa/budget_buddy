@@ -1,7 +1,7 @@
---CREATE DATABASE IF NOT EXISTS budget_buddy;
---USE budget_buddy;
+CREATE DATABASE IF NOT EXISTS budget_buddy;
+USE budget_buddy;
 
---CREATE TABLE users (
+CREATE TABLE users (
     id INT PRIMARY KEY AUTO_INCREMENT,
     nom VARCHAR(100),
     prenom VARCHAR(100),
@@ -9,7 +9,7 @@
     password VARCHAR(255)
 );
 
---CREATE TABLE transactions (
+CREATE TABLE transactions (
     id INT PRIMARY KEY AUTO_INCREMENT,
     user_id INT,
     montant DECIMAL(10,2),
@@ -17,4 +17,4 @@
     description TEXT,
     date DATETIME,
     FOREIGN KEY (user_id) REFERENCES users(id)
---);
+);

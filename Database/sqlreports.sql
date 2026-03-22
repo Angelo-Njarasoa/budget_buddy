@@ -37,7 +37,6 @@ CREATE TABLE transactions (
 INSERT INTO users (nom, prenom, email, password) VALUES
 ('Test', 'User', 'test@mail.com', '1234'),
 ('Cashflow', 'Alya', 'alya@mail.com', 'Test123!'),
-('SansSouci', 'Yaniss', 'yaniss@mail.com', 'Test123!'),
 ('Depensetout', 'Angelo', 'angelo@mail.com', 'Test123!'),
 ('Test', 'Python', 'python@test.com', '1234');
 

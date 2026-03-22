@@ -1,52 +1,33 @@
 import customtkinter
-from backend.database import login as db_login
+from backend.database import login
 
 class LoginScreen:
-    def __init__(self, root, switch_to_dashboard, switch_to_register):
+    def __init__(self, root, go_to_dashboard, go_to_register):
         self.root = root
-        self.switch_to_dashboard = switch_to_dashboard
-        self.switch_to_register = switch_to_register
+        self.go_to_dashboard = go_to_dashboard
+        self.go_to_register = go_to_register
 
-        self.frame = customtkinter.CTkScrollableFrame(master=root, orientation="vertical")
-        self.frame.pack(pady=20, padx=60, fill="both", expand=True)
+        self.frame = customtkinter.CTkFrame(root)
+        self.frame.pack(fill="both", expand=True, padx=20, pady=20)
 
-        self.label = customtkinter.CTkLabel(master=self.frame, text="Se connecter", font=("Roboto", 24))
-        self.label.pack(pady=12, padx=10)
+        customtkinter.CTkLabel(self.frame, text="Login", font=("Roboto", 24)).pack(pady=10)
 
-        self.email_entry = customtkinter.CTkEntry(master=self.frame, placeholder_text="Email")
-        self.email_entry.pack(pady=12, padx=10)
+        self.email = customtkinter.CTkEntry(self.frame, placeholder_text="Email")
+        self.email.pack(pady=10)
 
-        self.password_entry = customtkinter.CTkEntry(master=self.frame, placeholder_text="Mot de passe", show="*")
-        self.password_entry.pack(pady=12, padx=10)
+        self.password = customtkinter.CTkEntry(self.frame, show="*", placeholder_text="Password")
+        self.password.pack(pady=10)
 
-        self.message = customtkinter.CTkLabel(master=self.frame, text="")
-        self.message.pack(pady=5)
+        self.message = customtkinter.CTkLabel(self.frame, text="")
+        self.message.pack()
 
-        self.login_button =customtkinter.CTkButton(master=self.frame, text="Connexion", command=self.login)
-        self.login_button.pack(pady=12, padx=10)
+        customtkinter.CTkButton(self.frame, text="Login", command=self.login).pack(pady=10)
+        customtkinter.CTkButton(self.frame, text="Register", command=self.go_to_register).pack()
 
-        self.register_button = customtkinter.CTkButton(master=self.frame, text="S'inscrire", command=self.go_to_register)
-        self.register_button.pack(pady=12, padx=10)
-
-    def login(self):    
-        email = self.email_entry.get()
-        password = self.password_entry.get()
-
-        if not email or not password:
-            self.message.configure(text="Veuillez remplir tous les champs", text_color="red")
-            return
-
-        user = db_login(email,password)
+    def login(self):
+        user = login(self.email.get(), self.password.get())
 
         if user:
-            self.message.configure(text="Connexion réussie", text_color="green")
-            self.switch_to_dashboard(user)
+            self.go_to_dashboard(user)
         else:
-            self.message.configure(text="Email ou mot de passe incorrect", text_color="red")
-                
-       
-
-    def go_to_register(self):
-        self.switch_to_register()
-
-        
+            self.message.configure(text="Invalid credentials", text_color="red")

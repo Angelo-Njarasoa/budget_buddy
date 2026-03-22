@@ -1,25 +1,63 @@
-from backend.database import get_balance_by_user
 import customtkinter
+from backend.transaction import get_transactions_by_user
+from backend.budgetmanagement import generate_summary
 
 class DashboardScreen:
-    def __init__(self, root, switch_to_login,user):
+    def __init__(self, root, user, logout, go_to_transaction, go_to_history):
         self.root = root
-        self.switch_to_login = switch_to_login
         self.user = user
 
-        self.frame = customtkinter.CTkFrame(master=root)
-        self.frame.pack(pady=20, padx=60, fill="both", expand=True)
+        self.frame = customtkinter.CTkFrame(root)
+        self.frame.pack(fill="both", expand=True, padx=20, pady=20)
 
-        self.label = customtkinter.CTkLabel(master=self.frame, text="Dashboard", font=("Roboto", 24))
-        self.label.pack(pady=12, padx=10)
-        balance = get_balance_by_user(self.user["id"])
-        text = f"{self.user['prenom']} {self.user['nom']} : Solde = {balance} €"
+        customtkinter.CTkLabel(self.frame, text="Dashboard", font=("Roboto", 24)).pack(pady=10)
 
-        self.message = customtkinter.CTkLabel(master=self.frame, text=text)
-        self.message.pack(pady=12, padx=10)
+        transactions = get_transactions_by_user(user["id"])
+        summary = generate_summary(transactions)
 
-        self.back_button = customtkinter.CTkButton(master=self.frame, text="Se déconnecter", command=self.go_to_login)
-        self.back_button.pack(pady=12, padx=10)
+        customtkinter.CTkLabel(
+            self.frame,
+            text=f"Balance: {summary['balance']} €"
+        ).pack(pady=5)
 
-    def go_to_login(self):
-        self.switch_to_login()
+        customtkinter.CTkLabel(
+            self.frame,
+            text=f"Deposits: {summary['total_deposits']} €"
+        ).pack()
+
+        customtkinter.CTkLabel(
+            self.frame,
+            text=f"Withdrawals: {summary['total_withdrawals']} €"
+        ).pack()
+
+        if summary["overdrawn"]:
+            customtkinter.CTkLabel(
+                self.frame,
+                text="⚠ Overdrawn!",
+                text_color="red"
+            ).pack(pady=5)
+
+        customtkinter.CTkButton(
+            self.frame, text="Deposit",
+            command=lambda: go_to_transaction(user, "depot")
+        ).pack(pady=5)
+
+        customtkinter.CTkButton(
+            self.frame, text="Withdraw",
+            command=lambda: go_to_transaction(user, "retrait")
+        ).pack(pady=5)
+
+        customtkinter.CTkButton(
+            self.frame, text="Transfer",
+            command=lambda: go_to_transaction(user, "transfert")
+        ).pack(pady=5)
+
+        customtkinter.CTkButton(
+            self.frame, text="History",
+            command=lambda: go_to_history(user)
+        ).pack(pady=5)
+
+        customtkinter.CTkButton(
+            self.frame, text="Logout",
+            command=logout
+        ).pack(pady=10)

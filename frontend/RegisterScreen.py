@@ -1,56 +1,50 @@
-from backend.database import create_user
 import customtkinter
-
+from backend.database import create_user
+from backend.user import validate_password
 
 class RegisterScreen:
-    def __init__(self, root, switch_to_login):
+    def __init__(self, root, go_to_login):
         self.root = root
-        self.switch_to_login = switch_to_login
+        self.go_to_login = go_to_login
 
-        self.frame = customtkinter.CTkScrollableFrame(master=root, orientation="vertical")
-        self.frame.pack(pady=20, padx=60, fill="both", expand=True)
+        self.frame = customtkinter.CTkFrame(root)
+        self.frame.pack(fill="both", expand=True, padx=20, pady=20)
 
-        self.label = customtkinter.CTkLabel(master=self.frame, text="Inscription", font=("Roboto", 24))
-        self.label.pack(pady=12, padx=10)
+        customtkinter.CTkLabel(self.frame, text="Register", font=("Roboto", 24)).pack(pady=10)
 
-        self.first_name_entry = customtkinter.CTkEntry(master=self.frame, placeholder_text="Prénom")
-        self.first_name_entry.pack(pady=12, padx=10)
+        self.nom = customtkinter.CTkEntry(self.frame, placeholder_text="Last Name")
+        self.nom.pack(pady=5)
 
-        self.last_name_entry = customtkinter.CTkEntry(master=self.frame, placeholder_text="Nom")
-        self.last_name_entry.pack(pady=12, padx=10)
-        
-        self.email_entry = customtkinter.CTkEntry(master=self.frame, placeholder_text="Email")
-        self.email_entry.pack(pady=12, padx=10)
+        self.prenom = customtkinter.CTkEntry(self.frame, placeholder_text="First Name")
+        self.prenom.pack(pady=5)
 
-        self.password_entry = customtkinter.CTkEntry(master=self.frame, placeholder_text="Mot de passe", show="*")
-        self.password_entry.pack(pady=1, padx=10)
+        self.email = customtkinter.CTkEntry(self.frame, placeholder_text="Email")
+        self.email.pack(pady=5)
 
-        self.message = customtkinter.CTkLabel(master=self.frame, text="")
-        self.message.pack(pady=1)
+        self.password = customtkinter.CTkEntry(self.frame, show="*", placeholder_text="Password")
+        self.password.pack(pady=5)
 
-        self.register_button = customtkinter.CTkButton(master=self.frame, text="S'inscrire", command=self.register)
-        self.register_button.pack(pady=12, padx=10)
+        self.message = customtkinter.CTkLabel(self.frame, text="")
+        self.message.pack()
 
-        self.back_button = customtkinter.CTkButton(master=self.frame, text="Retour", command=self.go_to_login)
-        self.back_button.pack(pady=12, padx=10)
-
+        customtkinter.CTkButton(self.frame, text="Register", command=self.register).pack(pady=10)
+        customtkinter.CTkButton(self.frame, text="Back", command=self.go_to_login).pack()
 
     def register(self):
-        email = self.email_entry.get()
-        password = self.password_entry.get()
-        first_name = self.first_name_entry.get()
-        last_name = self.last_name_entry.get()
+        valid, msg = validate_password(self.password.get())
 
-        if not email or not password or not first_name or not last_name:
-            self.message.configure(text="Veuillez remplir tous les champs", text_color="red")
+        if not valid:
+            self.message.configure(text=msg, text_color="red")
             return
 
-        success = create_user(last_name, first_name, email, password)
+        success = create_user(
+            self.nom.get(),
+            self.prenom.get(),
+            self.email.get(),
+            self.password.get()
+        )
 
         if success:
-            self.message.configure(text="Compte créé avec succès", text_color="green")
+            self.message.configure(text="Account created", text_color="green")
         else:
-            self.message.configure(text="Email déjà utilisé ou erreur", text_color="red")
-
-    def go_to_login(self):
-        self.switch_to_login()
+            self.message.configure(text="Error", text_color="red")
