@@ -3,6 +3,7 @@ from backend.transaction import add_transaction, make_transfer
 from datetime import datetime
 from backend.database import get_user_by_email
 
+
 class TransactionScreen:
     def __init__(self, root, user, transaction_type, go_back):
         self.user = user
@@ -20,12 +21,12 @@ class TransactionScreen:
         self.description = customtkinter.CTkEntry(self.frame, placeholder_text="Description")
         self.description.pack(pady=5)
 
-        # Champ catégorie pour dépôt et retrait
+        # Category field for deposit and withdrawal
         if self.transaction_type in ["depot", "retrait"]:
             self.category = customtkinter.CTkEntry(self.frame, placeholder_text="Category")
             self.category.pack(pady=5)
 
-        # Champ email destinataire pour transfert
+        # Recipient email field for transfer
         if self.transaction_type == "transfert":
             self.recipient_email = customtkinter.CTkEntry(self.frame, placeholder_text="Recipient Email")
             self.recipient_email.pack(pady=5)
@@ -61,7 +62,7 @@ class TransactionScreen:
                 self.message.configure(text="Transfer successful! (both accounts updated)", text_color="green")
 
             else:
-                # Dépôt ou Retrait
+                # Deposit or Withdrawal
                 category = getattr(self, 'category', None)
                 cat_value = category.get().strip() if category else "salaire"
 
