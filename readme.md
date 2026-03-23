@@ -24,7 +24,7 @@ Une application desktop développée en Python permettant de suivre ses transact
 
 1. Clone le repository :
    ```bash
-   git clone https://github.com/tonusername/budget_buddy.git
+   git clone https://github.com/Angelo-Njarasoa/budget_buddy.git
    cd budget_buddy
 
 Installe les dépendances :Bashpip install customtkinter mysql-connector-python
@@ -33,3 +33,5 @@ Crée une base MySQL nommée budget_buddy
 Exécute le fichier database/init.sql
 
 Lance l’application :Bashpython main.py
+
+Fais par Alya Annabi, Angelo Njarasoa  et Yaniss aouri
