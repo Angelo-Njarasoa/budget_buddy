@@ -1,0 +1,50 @@
+# Virtual environments
+venv/
+env/
+.venv/
+ENV/
+
+# Python cache and compiled files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Sensitive configuration files
+.env
+config.ini
+credentials.json
+database.ini
+
+# Log and temporary files
+*.log
+*.tmp
+temp/
+*.temp
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*.sublime-*
+
+# Operating system files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Database backups
+*.bak
+*.backup
+*.sql.backup
+database/backup/
+
+# Test files
+test_*.py
+*.test.py
+tests/
+
+# Build and distribution
+build/
+dist/
+*.egg-info/
