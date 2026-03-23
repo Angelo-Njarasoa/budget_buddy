@@ -1,6 +1,6 @@
 import customtkinter
 from backend.database import create_user
-from backend.user import validate_password
+from backend.user import validate_registration
 
 class RegisterScreen:
     def __init__(self, root, go_to_login):
@@ -12,11 +12,11 @@ class RegisterScreen:
 
         customtkinter.CTkLabel(self.frame, text="Register", font=("Roboto", 24)).pack(pady=10)
 
-        self.nom = customtkinter.CTkEntry(self.frame, placeholder_text="Last Name")
-        self.nom.pack(pady=5)
+        self.last_name = customtkinter.CTkEntry(self.frame, placeholder_text="Last Name")
+        self.last_name.pack(pady=5)
 
-        self.prenom = customtkinter.CTkEntry(self.frame, placeholder_text="First Name")
-        self.prenom.pack(pady=5)
+        self.first_name = customtkinter.CTkEntry(self.frame, placeholder_text="First Name")
+        self.first_name.pack(pady=5)
 
         self.email = customtkinter.CTkEntry(self.frame, placeholder_text="Email")
         self.email.pack(pady=5)
@@ -31,20 +31,29 @@ class RegisterScreen:
         customtkinter.CTkButton(self.frame, text="Back", command=self.go_to_login).pack()
 
     def register(self):
-        valid, msg = validate_password(self.password.get())
+        # Validation complète (password + email + doublon)
+        valid, msg = validate_registration(
+            self.last_name.get().strip(),
+            self.first_name.get().strip(),
+            self.email.get().strip(),
+            self.password.get()
+        )
 
         if not valid:
             self.message.configure(text=msg, text_color="red")
             return
 
+        # Si tout est bon → on crée l'utilisateur
         success = create_user(
-            self.nom.get(),
-            self.prenom.get(),
-            self.email.get(),
+            self.last_name.get().strip(),
+            self.first_name.get().strip(),
+            self.email.get().strip(),
             self.password.get()
         )
 
         if success:
-            self.message.configure(text="Account created", text_color="green")
+            self.message.configure(text="✅ Compte créé avec succès !", text_color="green")
+            # Optionnel : rediriger vers login après 1 seconde
+            self.root.after(1500, self.go_to_login)
         else:
-            self.message.configure(text="Error", text_color="red")
+            self.message.configure(text="❌ Erreur lors de la création", text_color="red")

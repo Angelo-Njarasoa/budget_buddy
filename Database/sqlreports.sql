@@ -42,7 +42,7 @@ INSERT INTO users (nom, prenom, email, password) VALUES
 
 -- 6. insert transactions
 INSERT INTO transactions (user_id, montant, type, description, date) VALUES
-(1, 50.00, 'depot', 'test dépôt', NOW()),
+(1, 50.00, 'depot', 'test depot', NOW()),
 (2, 1000.00, 'depot', 'Salaire', NOW()),
 (2, -50.00, 'retrait', 'Courses', NOW()),
 (3, 200.00, 'depot', 'Freelance', NOW()),

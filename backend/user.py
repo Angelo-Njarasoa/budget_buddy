@@ -1,6 +1,8 @@
-from backend.database import create_user, get_user_by_email
+from backend.database import get_user_by_email, email_exists, create_user
 from backend.transaction import add_transaction
 import re
+import hashlib
+import os
 
 
 def register_user(nom, prenom, email, password, initial_balance):
@@ -41,3 +43,41 @@ def validate_password(password):
         return False, "1 symbole requis"
 
     return True, "Mot de passe valide"
+
+def is_valid_email(email: str) -> bool:
+    
+    pattern = r'^[a-zA-Z0-9._%+-]{2,}@[a-zA-Z0-9.-]{2,}\.[a-zA-Z]{2,}$'
+    return bool(re.match(pattern, email))
+
+def validate_registration(nom: str, prenom: str, email: str, password: str):
+
+    
+    valid_pwd, msg_pwd = validate_password(password)
+    if not valid_pwd:
+        return False, msg_pwd
+
+    if not is_valid_email(email):
+        return False, "Email invalide ! Exemple : jean.dupont@gmail.com"
+
+   
+    if email_exists(email):
+        return False, "Cet email est déjà utilisé"
+
+    
+    return True, "Inscription réussie"
+ 
+def hash_password(password: str) -> str:
+    """Hash password with PBKDF2 + random salt"""
+    salt = os.urandom(16)
+    hashed = hashlib.pbkdf2_hmac('sha256', password.encode('utf-8'), salt, 100000)
+    return salt.hex() + ':' + hashed.hex()
+
+def verify_password(plain_password: str, stored_hash: str) -> bool:
+    """Verify password against stored hash"""
+    try:
+        salt_hex, hash_hex = stored_hash.split(':', 1)
+        salt = bytes.fromhex(salt_hex)
+        new_hash = hashlib.pbkdf2_hmac('sha256', plain_password.encode('utf-8'), salt, 100000)
+        return new_hash.hex() == hash_hex
+    except:
+        return False

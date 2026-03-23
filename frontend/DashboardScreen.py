@@ -33,7 +33,7 @@ class DashboardScreen:
         if summary["overdrawn"]:
             customtkinter.CTkLabel(
                 self.frame,
-                text="⚠ Overdrawn!",
+                text="Overdrawn!",
                 text_color="red"
             ).pack(pady=5)
 
